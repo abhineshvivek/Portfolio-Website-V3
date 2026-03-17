@@ -21,4 +21,15 @@ mkdir -p dist/studio
 # Copy the compiled Sanity CMS files into the new `/studio` folder
 cp -R studio/dist/* dist/studio/
 
+echo "=== 4. Configuring Routing for Cloudflare Pages ==="
+# Cloudflare Pages tries to serve the main index.html for all routes (SPA fallback).
+# We must explicitly tell it to let the `/studio/` path load its own index.html
+cat << 'EOF' > dist/_routes.json
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": ["/studio/*"]
+}
+EOF
+
 echo "=== Build Complete! Cloudflare will now deploy the 'dist' directory. ==="

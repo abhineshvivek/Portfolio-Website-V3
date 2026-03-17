@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, ArrowRight } from 'lucide-react';
 
 const mediaImports = import.meta.glob('../assets/freelance/*.{png,jpg,jpeg,webp,mp4,gif}', { eager: true, import: 'default' });
 const freelanceItems = Object.entries(mediaImports).map(([path, mod]: [string, any], idx) => {
@@ -16,10 +16,11 @@ const freelanceItems = Object.entries(mediaImports).map(([path, mod]: [string, a
 export const FreelanceGrid: React.FC = () => {
     const [selectedItem, setSelectedItem] = useState<{ id: string; src: string; type: string; alt: string } | null>(null);
     const [hoveredId, setHoveredId] = useState<string | null>(null);
+    const [hasScrolled, setHasScrolled] = useState(false);
 
     return (
         <section id="freelance" className="py-24 md:py-40 px-6 md:px-20 bg-zinc-50 dark:bg-dark-bg transition-colors duration-300">
-            <div className="max-w-[1400px] mx-auto w-full">
+            <div className="max-w-[1400px] mx-auto w-full relative">
                 <div className="mb-24 md:flex flex-col items-start text-left">
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-6 text-zinc-900 dark:text-white">
                         Selected <span className="text-[#B200FF] font-serif italic">Visuals</span> & Freelance Projects.
@@ -30,7 +31,14 @@ export const FreelanceGrid: React.FC = () => {
                 </div>
 
                 {/* Auto-fill responsive masonry-style grid for visual assets (Carousel on Mobile, Masonry on Tablet/Desktop) */}
-                <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 hide-scrollbar sm:block sm:columns-2 md:columns-3 sm:space-y-6 sm:pb-0 sm:gap-6">
+                <div 
+                    className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-8 hide-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0 sm:block sm:columns-2 md:columns-3 sm:space-y-6 sm:pb-0 sm:gap-6"
+                    onScroll={(e) => {
+                        if (e.currentTarget.scrollLeft > 20) {
+                            setHasScrolled(true);
+                        }
+                    }}
+                >
                     {freelanceItems.map((item, idx) => {
                         const isHovered = hoveredId === item.id;
                         const isSomethingHovered = hoveredId !== null;
@@ -61,7 +69,7 @@ export const FreelanceGrid: React.FC = () => {
                                 onMouseEnter={() => setHoveredId(item.id)}
                                 onMouseLeave={() => setHoveredId(null)}
                                 onClick={() => setSelectedItem({ id: item.id, src: item.src, type: item.type, alt: item.alt })}
-                                className="relative w-full rounded-3xl overflow-hidden cursor-zoom-in group bg-zinc-200 dark:bg-zinc-900 shadow-xl dark:shadow-2xl break-inside-avoid mb-0 sm:mb-6 md:mb-8 min-w-[85vw] snap-center shrink-0 sm:min-w-0 sm:shrink"
+                                className="relative rounded-3xl overflow-hidden cursor-zoom-in group bg-zinc-200 dark:bg-zinc-900 shadow-xl dark:shadow-2xl break-inside-avoid mb-0 sm:mb-6 md:mb-8 w-[85vw] sm:w-full snap-center shrink-0 sm:shrink"
                             >
                                 {item.type === 'video' ? (
                                     <video
@@ -91,6 +99,27 @@ export const FreelanceGrid: React.FC = () => {
                         );
                     })}
                 </div>
+
+                {/* Animated Swipe Indicator (Mobile Only) */}
+                <AnimatePresence>
+                    {!hasScrolled && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.4 }}
+                            className="md:hidden absolute bottom-12 right-6 z-20 pointer-events-none bg-black/40 backdrop-blur-xl border border-white/10 text-white text-xs font-medium tracking-wide uppercase px-4 py-2 rounded-full flex items-center gap-2 shadow-xl"
+                        >
+                            <span>Swipe</span>
+                            <motion.div
+                                animate={{ x: [0, 4, 0] }}
+                                transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+                            >
+                                <ArrowRight size={14} strokeWidth={2.5} />
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* Lightbox Modal */}

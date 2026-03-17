@@ -21,6 +21,13 @@ const homepageProjectsQuery = `
   }
 `;
 
+const formatTag = (text: string) => {
+    if (!text) return '';
+    const beforePunctuation = text.split(/,|&/)[0].trim();
+    const words = beforePunctuation.split(/\s+/);
+    return words.slice(0, 3).join(' ');
+};
+
 const ProjectCard = ({ project }: { project: SanityProject }) => {
     const { setCursorVariant } = useCursor();
     const slug = project.slug?.current || project._id;
@@ -72,7 +79,7 @@ const ProjectCard = ({ project }: { project: SanityProject }) => {
                                     key={tag}
                                     className="px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest text-[#B200FF] bg-white/90 dark:bg-black/80 backdrop-blur-md uppercase transform -translate-y-2 opacity-0 group-hover/image:translate-y-0 group-hover/image:opacity-100 transition-all duration-500 ease-out"
                                 >
-                                    {tag}
+                                    {formatTag(tag)}
                                 </div>
                             ))}
                         </div>

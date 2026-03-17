@@ -127,18 +127,18 @@ const portableTextComponents: PortableTextComponents = {
         h2: ({ children, value }) => {
             const text = value?.children?.map((c: any) => c.text).join('') || '';
             const id = generateSlug(text);
-            return <h2 id={id} className="w-full max-w-4xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tighter text-neutral-900 dark:text-white mt-16 md:mt-24 mb-6 md:mb-10 leading-tight wrap-break-word">{children}</h2>
+            return <h2 id={id} className="w-full max-w-4xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tighter text-neutral-900 dark:text-white mt-14 mb-3 leading-tight wrap-break-word">{children}</h2>
         },
         h3: ({ children, value }) => {
             const text = value?.children?.map((c: any) => c.text).join('') || '';
             const id = generateSlug(text);
-            return <h3 id={id} className="w-full max-w-4xl text-2xl sm:text-3xl md:text-4xl font-light tracking-tight text-neutral-900 dark:text-white mt-12 md:mt-16 mb-6 md:mb-8 leading-snug wrap-break-word">{children}</h3>
+            return <h3 id={id} className="w-full max-w-4xl text-2xl sm:text-3xl md:text-4xl font-light tracking-tight text-neutral-900 dark:text-white mt-14 mb-3 leading-snug wrap-break-word">{children}</h3>
         },
         h4: ({ children }) => (
-            <h4 className="w-full max-w-3xl text-2xl font-medium text-neutral-900 dark:text-white mt-12 mb-6">{children}</h4>
+            <h4 className="w-full max-w-3xl text-2xl font-medium text-neutral-900 dark:text-white mt-14 mb-3">{children}</h4>
         ),
         normal: ({ children }) => (
-            <p className="w-full max-w-3xl text-lg md:text-xl text-neutral-700 dark:text-neutral-300 leading-[1.8] font-light mb-8 wrap-break-word">{children}</p>
+            <p className="w-full max-w-3xl text-lg md:text-xl text-neutral-700 dark:text-neutral-300 leading-[1.8] font-light mb-5 wrap-break-word">{children}</p>
         ),
         blockquote: ({ children }) => (
             <div className="w-full max-w-4xl">
@@ -153,12 +153,12 @@ const portableTextComponents: PortableTextComponents = {
     },
     list: {
         bullet: ({ children }) => (
-            <ul className="w-full max-w-3xl my-10 flex flex-col gap-6">
+            <ul className="w-full max-w-3xl mt-3 mb-8 flex flex-col space-y-3">
                 {children}
             </ul>
         ),
         number: ({ children }) => (
-            <ol className="w-full max-w-3xl my-10 flex flex-col gap-8 [counter-reset:custom-counter]">
+            <ol className="w-full max-w-3xl mt-3 mb-8 flex flex-col space-y-3 [counter-reset:custom-counter]">
                 {children}
             </ol>
         ),
@@ -532,17 +532,19 @@ export const CaseStudy: React.FC = () => {
             )}
 
             {/* Unified Reading Tools Container */}
-            <div className="fixed z-40 flex items-center gap-3 bottom-[calc(6rem+env(safe-area-inset-bottom))] md:bottom-8 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-8 transition-transform duration-300">
+            <div className="fixed bottom-6 inset-x-0 w-full px-6 flex justify-between items-end pointer-events-none z-[40] md:bottom-8 md:inset-x-auto md:w-auto md:px-0 md:right-8 md:items-center md:gap-3">
                 {toc.length > 0 && (
                     <button
                         onClick={() => setIsMobileTocOpen(true)}
-                        className="lg:hidden px-6 py-3.5 bg-white/90 dark:bg-black/80 backdrop-blur-xl border border-neutral-200 dark:border-white/10 rounded-full shadow-2xl flex items-center gap-2.5 text-sm font-semibold tracking-wide text-neutral-900 dark:text-white active:scale-95 transition-transform"
+                        className="lg:hidden pointer-events-auto px-6 py-3.5 bg-white/90 dark:bg-black/80 backdrop-blur-xl border border-neutral-200 dark:border-white/10 rounded-full shadow-2xl flex items-center gap-2.5 text-sm font-semibold tracking-wide text-neutral-900 dark:text-white active:scale-95 transition-transform"
                     >
                         <Menu size={16} className="text-[#B200FF]" />
                         Index
                     </button>
                 )}
-                <DynamicScrollDirector />
+                <div className="pointer-events-auto ml-auto md:ml-0">
+                    <DynamicScrollDirector />
+                </div>
             </div>
         </article>
     );

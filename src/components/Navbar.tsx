@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
-import { Home, User, Briefcase, Mail, Sun, Moon } from 'lucide-react';
+import { Home, User, Briefcase, Mail, Sun, Moon, Menu, X } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCursor } from '../context/CursorContext';
 import { useModal } from '../context/ModalContext';
@@ -43,6 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     const { setCursorVariant } = useCursor();
     const { openResume } = useModal();
     const [mounted, setMounted] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -105,8 +106,10 @@ export const Navbar: React.FC<NavbarProps> = ({
     };
 
     return (
-        <AnimatePresence>
-            {!isAtBottom && (
+        <>
+            {/* Desktop UI: Centered Floating Pill */}
+            <AnimatePresence>
+                {!isAtBottom && !isDrawerOpen && (
                 <motion.div
                     variants={{
                         visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 25, delay: skipDelay ? 0 : 2.5 } },
@@ -116,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     initial="initial"
                     animate={hidden ? "hidden" : "visible"}
                     exit="hidden"
-                    className="fixed bottom-0 pb-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 z-50 w-full flex justify-center pointer-events-none"
+                    className="hidden md:flex fixed bottom-0 pb-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 z-50 w-full justify-center pointer-events-none"
                     onMouseLeave={() => {
                         setHoveredId(null);
                         setCursorVariant('default');
@@ -237,6 +240,88 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </nav>
                 </motion.div>
             )}
-        </AnimatePresence>
+            </AnimatePresence>
+
+            {/* Mobile Hamburger Button */}
+            <div className="md:hidden fixed top-6 right-6 z-100">
+                <button
+                    onClick={() => setIsDrawerOpen(true)}
+                    className="w-12 h-12 flex items-center justify-center rounded-full bg-white/80 dark:bg-black/80 backdrop-blur-xl border border-neutral-200/50 dark:border-neutral-800/50 shadow-lg text-neutral-900 dark:text-white"
+                >
+                    <Menu size={24} />
+                </button>
+            </div>
+
+            {/* Mobile Sidebar Drawer */}
+            <AnimatePresence>
+                {isDrawerOpen && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsDrawerOpen(false)}
+                            className="md:hidden fixed inset-0 z-80 bg-black/40 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ x: "100%" }}
+                            animate={{ x: 0 }}
+                            exit={{ x: "100%" }}
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="md:hidden fixed inset-y-0 right-0 w-3/4 max-w-sm bg-neutral-900/95 dark:bg-[#050505]/95 backdrop-blur-3xl z-90 border-l border-white/10 p-8 flex flex-col"
+                        >
+                            <div className="flex justify-end mb-12">
+                                <button onClick={() => setIsDrawerOpen(false)} className="p-2 text-white/50 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10">
+                                    <X size={24} />
+                                </button>
+                            </div>
+
+                            <div className="flex flex-col gap-6">
+                                {navItems.map((item) => (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => {
+                                            setIsDrawerOpen(false);
+                                            scrollTo(item.id);
+                                        }}
+                                        className="text-left text-3xl font-light text-white hover:text-[#B200FF] transition-colors"
+                                    >
+                                        {item.label}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <button
+                                onClick={() => { setIsDrawerOpen(false); openResume(); }}
+                                className="mt-12 px-6 py-3 bg-white text-black rounded-full font-semibold max-w-max hover:bg-neutral-200 transition-colors"
+                            >
+                                Resume
+                            </button>
+
+                            <div className="mt-auto flex items-center justify-between border-t border-white/10 pt-6">
+                                <span className="text-white/50 text-base font-semibold uppercase tracking-widest">Theme</span>
+                                <button
+                                    onClick={handleThemeToggle}
+                                    className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors relative overflow-hidden"
+                                >
+                                    <AnimatePresence mode="wait">
+                                        <motion.div
+                                            key={isDarkMode ? 'moon' : 'sun'}
+                                            initial={{ y: 30, opacity: 0, scale: 0.5, rotate: -90 }}
+                                            animate={{ y: 0, opacity: 1, scale: 1, rotate: 0 }}
+                                            exit={{ y: -30, opacity: 0, scale: 0.5, rotate: 90 }}
+                                            transition={{ type: "spring", stiffness: 300, damping: 20, mass: 1 }}
+                                            className="absolute flex items-center justify-center"
+                                        >
+                                            {isDarkMode ? <Moon size={20} /> : <Sun size={20} />}
+                                        </motion.div>
+                                    </AnimatePresence>
+                                </button>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
+        </>
     );
 };

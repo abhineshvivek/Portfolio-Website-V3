@@ -85,7 +85,8 @@ export const ResumeModal = () => {
                         {/* Right Column (Actions) */}
                         <div className="flex-1 p-8 md:p-12 flex flex-col justify-center gap-4 bg-white/5">
                             <a
-                                href="/Abhinesh-V-Resume.pdf"
+                                href="/resume.pdf"
+                                download="Abhinesh_V_Resume.pdf"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onMouseEnter={() => setCursorVariant('purple')}

@@ -24,6 +24,11 @@ export const allProjectsQuery = `
     tagline,
     impactStatement,
     "heroImageUrl": heroImage.asset->url,
+    heroImage {
+      ...,
+      alt
+    },
+    seo,
     bentoStats
   }
 `;
@@ -35,18 +40,24 @@ export const projectBySlugQuery = `
     slug,
     tagline,
     impactStatement,
-    heroImage,
+    heroImage {
+        ...,
+        alt
+    },
+    seo,
     bentoStats,
     body[] {
       ...,
       _type == "image" => {
         ...,
         "url": asset->url,
-        "dimensions": asset->metadata.dimensions
+        "dimensions": asset->metadata.dimensions,
+        alt
       },
       _type == "featureBlock" => {
         ...,
-        "imageUrl": image.asset->url
+        "imageUrl": image.asset->url,
+        "imageAlt": image.alt
       }
     },
     takeaways

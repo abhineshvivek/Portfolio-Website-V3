@@ -93,14 +93,14 @@ const portableTextComponents: PortableTextComponents = {
                     {value.imageUrl ? (
                         <img
                             src={value.imageUrl}
-                            alt={value.heading || ''}
+                            alt={value.imageAlt || value.heading || ''}
                             className="w-full h-auto object-cover rounded-2xl md:rounded-3xl shadow-sm"
                             loading="lazy"
                         />
                     ) : value.image ? (
                         <img
                             src={urlFor(value.image).width(1200).auto('format').url()}
-                            alt={value.heading || ''}
+                            alt={value.imageAlt || value.image?.alt || value.heading || ''}
                             className="w-full h-auto object-cover rounded-2xl md:rounded-3xl shadow-sm"
                             loading="lazy"
                         />
@@ -324,8 +324,8 @@ export const CaseStudy: React.FC = () => {
     return (
         <article className="min-h-screen bg-white dark:bg-dark-bg transition-colors duration-500 overflow-x-hidden">
             <SEO
-                title={`${project.title} — Case Study`}
-                description={project.tagline}
+                title={project.seo?.metaTitle || project.title}
+                description={project.seo?.metaDescription || project.impactStatement || project.tagline}
                 image={heroUrl || undefined}
             />
 
@@ -334,7 +334,7 @@ export const CaseStudy: React.FC = () => {
                 {heroUrl && (
                     <img
                         src={heroUrl}
-                        alt={project.title}
+                        alt={project.heroImage?.alt || project.title}
                         className="absolute inset-0 w-full h-full object-cover"
                     />
                 )}

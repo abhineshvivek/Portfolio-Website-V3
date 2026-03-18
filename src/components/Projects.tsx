@@ -15,7 +15,11 @@ const homepageProjectsQuery = `
     slug,
     tagline,
     impactStatement,
-    heroImage,
+    heroImage {
+      ...,
+      alt
+    },
+    seo,
     bentoStats,
     isFeatured
   }

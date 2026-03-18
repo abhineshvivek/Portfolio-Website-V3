@@ -100,7 +100,7 @@ export const ProjectsPage: React.FC = () => {
                                         {imageUrl && (
                                             <motion.img
                                                 src={imageUrl}
-                                                alt={project.title}
+                                                alt={project.heroImage?.alt || project.title}
                                                 loading="lazy"
                                                 className="w-full h-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-105"
                                             />

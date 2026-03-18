@@ -50,6 +50,14 @@ export default defineType({
             title: 'Hero Image',
             type: 'image',
             options: { hotspot: true },
+            fields: [
+                defineField({
+                    name: 'alt',
+                    title: 'Alt Text',
+                    type: 'string',
+                    description: "Crucial for SEO. Describe the image using keywords like 'UI design by Abhinesh in Chennai'.",
+                }),
+            ],
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -93,6 +101,7 @@ export default defineType({
                             name: 'alt',
                             title: 'Alt Text',
                             type: 'string',
+                            description: "Crucial for SEO. Describe the image using keywords like 'UI design by Abhinesh in Chennai'.",
                         }),
                         defineField({
                             name: 'caption',
@@ -147,6 +156,14 @@ export default defineType({
                             title: 'Image',
                             type: 'image',
                             options: { hotspot: true },
+                            fields: [
+                                defineField({
+                                    name: 'alt',
+                                    title: 'Alt Text',
+                                    type: 'string',
+                                    description: "Crucial for SEO. Describe the image using keywords like 'UI design by Abhinesh in Chennai'.",
+                                }),
+                            ],
                         }),
                         defineField({
                             name: 'imageLeft',
@@ -170,6 +187,25 @@ export default defineType({
             type: 'text',
             description: 'Project reflections and key learnings.',
             rows: 6,
+        }),
+        defineField({
+            name: 'seo',
+            title: 'SEO Metadata',
+            type: 'object',
+            fields: [
+                defineField({
+                    name: 'metaTitle',
+                    title: 'Meta Title',
+                    type: 'string',
+                    validation: (Rule) => Rule.max(60).warning('Optimal length: 50-60 characters.'),
+                }),
+                defineField({
+                    name: 'metaDescription',
+                    title: 'Meta Description',
+                    type: 'string',
+                    validation: (Rule) => Rule.max(160).warning('Optimal length: 150-160 characters.'),
+                }),
+            ],
         }),
     ],
     preview: {
